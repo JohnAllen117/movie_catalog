@@ -1,0 +1,35 @@
+<h1><%= @movie_deets[0]["title"] %></h1>
+
+
+<h2>Year Released: <%= @movie_deets[0]["year"] %> - Rating: <%= @movie_deets[0]["rating"] %> - Genre: <%= @movie_deets[0]["genre"] %> - Studio: <%= @movie_deets[0]["studio"] %></h2>
+
+<table>
+
+
+<tr><td class="syn"><p>Synopsis: <%= @movie_deets[0]["synopsis"] %></p></td></tr>
+
+
+  <tr><td><h3>Characters</h3></td><td><h3>Actors</h3></td></tr>
+
+<% @movie_deets.each do |row| %>
+  <tr>
+
+    <td>
+      <% if row["character"] != nil %>
+        <%= row["character"] %>
+      <% end %>
+    </td>
+
+    <td>
+      <% if row["character"] != nil %>
+        <a href="/actors/<%= row["actor"] %>"><%= row["actor"] %></a>
+      <% end %>
+    </td>
+
+  </tr>
+
+
+<% end %>
+</table>
+
+<a href="/movies">Go Back</a>

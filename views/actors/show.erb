@@ -1,0 +1,24 @@
+<h1><%= @actor_info[0]["name"] %></h1>
+
+<table>
+
+
+<tr><td><h2>Title</h2></td><td><h2>Rolé</h2></td></tr>
+
+<% @actor_info.each do |rowz| %>
+
+  <tr>
+    <td>
+      <a href="/movies/<%= rowz["title"] %>"><%= rowz["title"] %></a>
+    </td>
+
+
+  <td>
+    <%= rowz["character"] %>
+  </td>
+  </tr>
+
+  <% end %>
+
+
+</table>

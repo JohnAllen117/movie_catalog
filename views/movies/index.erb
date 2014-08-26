@@ -1,0 +1,60 @@
+<table>
+
+
+<tr><td class="tit">Title</td><td class="year">Year Released</td><td class="rate">Rating</td><td class="gen">Genre</td><td>Studio</td></tr>
+
+<% @results.each do |each| %>
+
+
+
+<tr><p>
+  <td><a href="/movies/<%= each["title"] %>"><%= each["title"] %></a></td>
+  <td><%= each["year"] %></td>
+  <td><%= each["rating"] %></td>
+  <td><%= each["genre"] %></td>
+  <td><%= each["studio"] %></td>
+
+
+
+</p>
+</tr>
+
+<% end %>
+
+
+</table>
+
+<br><br>
+
+
+<% if @page_num > 1 %>
+<div class="navbutts">
+
+     <a href="/movies?page=<%= @page_num/20 - 1 %>"> Previous</a>
+</div>
+
+<% end %>
+
+
+<% if @page_num/20 < @last_page_num %>
+  <div class="navbutts">
+
+      <a href="/movies?page=<%= @page_num/20 + 1 %>" >Next</a>
+</div>
+
+<% end %>
+
+<br><br>
+<br><br>
+
+<div>
+<form method=post action="/movies">
+<input type=text name="query">
+<input type=submit name="submit>"
+
+</form>
+
+</div>
+
+<br><br>
+<br><br>

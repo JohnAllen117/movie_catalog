@@ -1,0 +1,103 @@
+body {
+
+background-color: #340022;
+color: #FFFFFF;
+  font-family: 'Playfair Display', serif;
+
+margin-right: 10%;
+margin-left: 10%;
+
+}
+
+.splash {
+
+font-size: 100px;
+background-color: #FFFFFF;
+padding: 10px;
+
+}
+
+splash a:hover {
+
+
+color: #CC0000;
+
+}
+
+
+
+table {
+  color: #FF99DF;
+  background-color: #220122;
+  padding: 10%;
+  width: 100%;
+
+}
+
+.tit {
+width: 30%;
+
+}
+
+.year {
+width: 18%;
+
+}
+
+.rate {
+
+width: 18%
+
+}
+
+.gen {
+
+width: 30%
+
+
+
+}
+
+
+td {
+
+  padding: 6px;
+  max-width: 1%;
+}
+
+.navbutts {
+
+  margin-left: 10%;
+  margin-right: 10%;
+  padding: 17px;
+  border-radius: 23px;
+  background-color: black;
+  display: inline;
+
+}
+
+a {
+
+  font-family: 'Playfair Display', serif;
+  text-decoration: none;
+  color: #FF4545;
+
+}
+
+a:hover {
+
+color: #FFFFFF;
+
+}
+
+
+.syn {
+
+
+background-color: #FFFFFF;
+color: #000000;
+
+padding: 22px;
+
+}
+
