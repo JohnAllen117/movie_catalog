@@ -13,16 +13,6 @@ def db_connection
   end
 end
 
-# def find_last_page(field)
-
-#  @actor_info = db_connection do |conn|
-#   binding.pry
-#     conn.exec_params('SELECT $1 FROM movies;',[{ :value => field, :type => 0, :format => 0 }])
-#   end
-
-#   @actor_info.ntuples
-# end
-
 def find_last_page
 
  @actor_info = db_connection do |conn|
@@ -56,19 +46,21 @@ erb :'actors/index'
 end
 
 
+
 get '/actors/:id' do
 
   @actor_name = params[:id]
 
- @actor_info = db_connection do |conn|
-  conn.exec_params('SELECT title, actors.name AS actor, cast_members.character FROM movies
-    JOIN cast_members ON movies.id = cast_members.movie_id
-    JOIN actors ON cast_members.actor_id = actors.id
-    WHERE actors.name = $1
-    ORDER BY movies.title;',[@actor_name])
+  @actor_info = db_connection do |conn|
+  conn.exec_params('SELECT title, actors.name AS actor, cast_members.character
+                    FROM movies
+                    JOIN cast_members ON movies.id = cast_members.movie_id
+                    JOIN actors ON cast_members.actor_id = actors.id
+                    WHERE actors.name = $1
+                    ORDER BY movies.title;',[@actor_name])
 end
 
-
+@movies_starred_in = @actor_info.ntuples
 erb :'/actors/show'
 end
 
@@ -83,39 +75,21 @@ get '/movies' do
 
 
 @last_page_num = find_last_page/20
-# @last_page_num = find_last_page('title') WTFFFFFF
+@page_num = params[:page].to_i*20
+@sort = params[:sort] || 'title'
+  sql_statement = "SELECT title, year, rating, genres.name AS genre, studios.name AS studio
+                    FROM movies
+                    JOIN genres ON movies.genre_id = genres.id
+                    JOIN studios ON movies.studio_id = studios.id
+                    ORDER BY #{@sort} DESC
+                    LIMIT 20 OFFSET $1;"
 
-
-  @page_num = params[:page].to_i*20
-
- @results = db_connection do |conn|
-  conn.exec_params('SELECT title, year, rating, genres.name AS genre, studios.name AS studio FROM movies
-              JOIN genres ON movies.genre_id = genres.id
-              JOIN studios ON movies.studio_id = studios.id
-              ORDER BY movies.title
-              LIMIT 20 OFFSET $1;',[@page_num])
+@results = db_connection do |conn|
+  conn.exec_params(sql_statement,[@page_num])
 end
-
 
 
 erb :'movies/index'
-end
-
-get '/movies/:id' do
-
-@movie_name = params[:id]
-
- @movie_deets = db_connection do |conn|
-  conn.exec_params('SELECT title, year, rating, synopsis, genres.name AS genre, studios.name AS studio, cast_members.character AS character, actors.name AS actor FROM movies
-              JOIN genres ON movies.genre_id = genres.id
-              JOIN cast_members ON movies.id = cast_members.movie_id
-              JOIN actors ON actors.id = cast_members.actor_id
-              JOIN studios ON movies.studio_id = studios.id
-              WHERE title = $1
-              ORDER BY movies.title;',[@movie_name])
-  end
-
-erb :'movies/show'
 end
 
 post '/movies' do
@@ -158,9 +132,28 @@ end
 end
 
 
+
+
 erb :'movies/index'
 end
 
+
+get '/movies/:id' do
+
+@movie_name = params[:id]
+
+ @movie_deets = db_connection do |conn|
+  conn.exec_params('SELECT title, year, rating, synopsis, genres.name AS genre, studios.name AS studio, cast_members.character AS character, actors.name AS actor FROM movies
+              JOIN genres ON movies.genre_id = genres.id
+              JOIN cast_members ON movies.id = cast_members.movie_id
+              JOIN actors ON actors.id = cast_members.actor_id
+              JOIN studios ON movies.studio_id = studios.id
+              WHERE title = $1
+              ORDER BY movies.title;',[@movie_name])
+  end
+
+erb :'movies/show'
+end
 
 post '/actors' do
 
@@ -168,7 +161,6 @@ post '/actors' do
   @results = []
 
   @last_page_num = find_last_page/20
-# @last_page_num = find_last_page('title') WTFFFFFF
   @page_num = params[:page].to_i*20
 
   @query = params[:query].reverse + '%'
@@ -177,10 +169,7 @@ post '/actors' do
 @results = db_connection do |conn|
   conn.exec_params('SELECT name FROM actors
     WHERE name ILIKE $1;',[@query])
-end
-
-
-
+  end
 erb :'actors/index'
 end
 
