@@ -172,6 +172,3 @@ post '/actors' do
   end
 erb :'actors/index'
 end
-
-
-puts "change"
